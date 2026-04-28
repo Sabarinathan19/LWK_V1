@@ -1,110 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LWK Platform Blueprint</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LWK Platform Blueprint</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #0A0A0F;
-      color: #E8E8F0;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #0A0A0F;
+  color: #E8E8F0;
+}
 
-    .container {
-      max-width: 960px;
-      margin: auto;
-      padding: 28px 20px;
-    }
+.container {
+  max-width: 960px;
+  margin: auto;
+  padding: 28px 20px;
+}
 
-    .header {
-      background: linear-gradient(135deg, #0F0F1A, #1A1030, #0F1A2A);
-      border-bottom: 1px solid #2A2A3A;
-      padding: 20px;
-    }
+.header {
+  background: linear-gradient(135deg, #0F0F1A, #1A1030, #0F1A2A);
+  border-bottom: 1px solid #2A2A3A;
+  padding: 20px;
+}
 
-    .tabs {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      margin-top: 20px;
-    }
+.tabs {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  margin-top: 20px;
+}
 
-    .tab {
-      padding: 10px 14px;
-      cursor: pointer;
-      font-weight: 600;
-      color: #6B7280;
-      border-bottom: 2px solid transparent;
-    }
+.tab {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #6B7280;
+  border-bottom: 2px solid transparent;
+}
 
-    .tab.active {
-      color: #A78BFA;
-      border-bottom: 2px solid #A78BFA;
-    }
+.tab.active {
+  color: #A78BFA;
+  border-bottom: 2px solid #A78BFA;
+}
 
-    .card {
-      background: #12121E;
-      border-radius: 12px;
-      padding: 16px;
-      border: 1px solid #1E1E2E;
-    }
+.card {
+  background: #12121E;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #1E1E2E;
+}
 
-    .phase {
-      margin-bottom: 10px;
-      border-radius: 12px;
-      overflow: hidden;
-    }
+.phase {
+  margin-bottom: 10px;
+}
 
-    .phase-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px;
-      cursor: pointer;
-    }
+.phase-header {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
 
-    .phase-body {
-      display: none;
-      padding: 10px 20px;
-    }
+.phase-body {
+  display: none;
+  margin-top: 10px;
+}
 
-    .task {
-      font-size: 13px;
-      margin: 6px 0;
-      color: #C4C4D4;
-    }
+.task {
+  font-size: 13px;
+  margin: 6px 0;
+  color: #C4C4D4;
+}
 
-    .grid {
-      display: grid;
-      gap: 12px;
-    }
+.grid {
+  display: grid;
+  gap: 12px;
+}
 
-    .grid-2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
 
-    .grid-3 {
-      grid-template-columns: repeat(3, 1fr);
-    }
+@media(max-width:768px){
+  .grid-2,.grid-3{grid-template-columns:1fr;}
+}
 
-    @media(max-width: 768px) {
-      .grid-2, .grid-3 {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .badge {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      display: inline-block;
-      margin: 3px;
-    }
-
-  </style>
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin: 3px;
+  display: inline-block;
+}
+</style>
 </head>
 
 <body>
@@ -113,7 +101,6 @@
   <div class="container">
     <h2>🚀 Learn with Keerthi — LWK Platform</h2>
     <p style="color:#6B7280;">Full Stack E-Learning Blueprint</p>
-
     <div class="tabs" id="tabs"></div>
   </div>
 </div>
@@ -121,67 +108,91 @@
 <div class="container" id="content"></div>
 
 <script>
+/* ================= DATA ================= */
+
 const PHASES = [
-  {
-    id:1,title:"Foundation",weeks:"Week 1–2",color:"#6C63FF",
-    tasks:["Initialize Turborepo","Setup PostgreSQL","JWT Auth","Google OAuth","Role middleware","Next.js setup","Express backend"]
-  },
-  {
-    id:2,title:"Core Platform",weeks:"Week 3–5",color:"#00C9A7",
-    tasks:["Course CRUD","Lessons management","Mux video upload","S3 docs","Video player","Enrollment","Catalog"]
-  }
+{ id:1,title:"Foundation",weeks:"Week 1–2",color:"#6C63FF",tasks:[
+"Initialize Turborepo monorepo","Setup PostgreSQL + Prisma schema","Email/password auth with JWT","Google OAuth2 login","Role middleware (Admin/Mentor/Student)","Next.js 14 + Tailwind CSS + shadcn/ui setup","Express.js backend scaffold"]},
+
+{ id:2,title:"Core Platform",weeks:"Week 3–5",color:"#00C9A7",tasks:[
+"Course CRUD (create, edit, publish)","Sections & Lessons management","Video upload → Mux (HLS streaming)","Document upload → AWS S3","Video player with resume progress","Student enrollment system","Course catalog with pagination"]},
+
+{ id:3,title:"Learning Features",weeks:"Week 6–7",color:"#FF6B6B",tasks:[
+"Quiz builder (MCQ + explanations)","Quiz attempt & scoring system","Progress tracking per lesson","Discussion / Q&A threads","Course search + Meilisearch","Ratings & Reviews","Resource download system"]},
+
+{ id:4,title:"Monetization",weeks:"Week 8–9",color:"#FFB703",tasks:[
+"Subscription plans (Monthly/Yearly)","Razorpay integration (India)","Stripe integration (Global)","Payment webhooks + verification","Access control by subscription","Mentor earnings dashboard","Coupon/promo code system"]},
+
+{ id:5,title:"Live & Notifications",weeks:"Week 10–11",color:"#8ECAE6",tasks:[
+"Socket.io real-time setup","In-app notification system","Email notifications (Resend.com)","Live class via 100ms.live","Live class scheduler","Class recording & replay","Push notifications (mobile)"]},
+
+{ id:6,title:"Admin & Polish",weeks:"Week 12–13",color:"#FB8500",tasks:[
+"Admin panel (users, courses, payments)","Mentor approval workflow","Platform analytics dashboard","React Native mobile app (Expo)","WCAG 2.1 AA accessibility audit","Comprehensive UI polish","Load testing"]},
+
+{ id:7,title:"Production Launch",weeks:"Week 14",color:"#52B788",tasks:[
+"Deploy frontend → Vercel","Deploy backend → Railway","Cloudflare CDN configuration","Sentry error monitoring","Posthog product analytics","Security audit checklist","🚀 Go Live!"]}
 ];
 
 const STACK = [
-  {layer:"Frontend",items:["Next.js","Tailwind","Zustand"],color:"#6C63FF"},
-  {layer:"Backend",items:["Node.js","Express"],color:"#00C9A7"}
+{layer:"Frontend",items:["Next.js 14","Tailwind CSS","shadcn/ui","Zustand","React Query"]},
+{layer:"Mobile",items:["React Native","Expo Router","Expo AV (video)"]},
+{layer:"Backend",items:["Node.js","Express.js","TypeScript","Socket.io","Passport.js"]},
+{layer:"Database",items:["PostgreSQL (Supabase)","Prisma ORM","Redis (Upstash)","Meilisearch"]},
+{layer:"Media",items:["Mux","AWS S3","FFmpeg","Cloudinary"]},
+{layer:"Payments",items:["Razorpay","Stripe"]},
+{layer:"Services",items:["100ms.live","Resend","Cloudflare","Sentry"]}
 ];
 
 const ROLES = [
-  {role:"Student",features:["Enroll","Watch","Quiz","Track"]},
-  {role:"Mentor",features:["Create","Upload","Analytics"]},
-  {role:"Admin",features:["Manage users","Payments","Analytics"]}
+{role:"Student",features:["Browse courses","Watch videos","Attempt quizzes","Track progress","Ask questions","Download resources","Subscribe","Join live classes"]},
+{role:"Mentor",features:["Create courses","Upload content","Build quizzes","Analytics","Earnings","Live classes","Q&A","Manage curriculum"]},
+{role:"Admin",features:["Approve mentors","Manage users","Moderate courses","Payments","Analytics","Subscriptions","Announcements"]}
 ];
 
 const COSTS = [
-  {service:"Supabase",cost:"Free → $25"},
-  {service:"Vercel",cost:"Free → $20"}
+{service:"Supabase",cost:"Free → $25/mo"},
+{service:"Vercel",cost:"Free → $20/mo"},
+{service:"Railway",cost:"~$10/mo"},
+{service:"Mux",cost:"$0.0036/min"},
+{service:"100ms.live",cost:"$0.003/min/user"},
+{service:"Razorpay",cost:"2%"},
+{service:"Resend",cost:"Free 3k/mo"},
+{service:"Cloudflare",cost:"Free"}
 ];
 
 const tabs = [
-  {id:"roadmap",label:"📍 Roadmap"},
-  {id:"stack",label:"🛠 Stack"},
-  {id:"roles",label:"👥 Roles"},
-  {id:"costs",label:"💰 Costs"}
+{id:"roadmap",label:"📍 Roadmap"},
+{id:"stack",label:"🛠 Stack"},
+{id:"roles",label:"👥 Roles"},
+{id:"schema",label:"🗄 Schema"},
+{id:"costs",label:"💰 Costs"}
 ];
 
-let activeTab = "roadmap";
+let activeTab="roadmap";
+
+/* ================= UI ================= */
 
 function renderTabs(){
-  const el = document.getElementById("tabs");
-  el.innerHTML = tabs.map(t=>`
-    <div class="tab ${activeTab===t.id?'active':''}" onclick="switchTab('${t.id}')">
-      ${t.label}
-    </div>
-  `).join("");
+  document.getElementById("tabs").innerHTML =
+  tabs.map(t=>`<div class="tab ${activeTab===t.id?'active':''}" onclick="switchTab('${t.id}')">${t.label}</div>`).join("");
 }
 
 function switchTab(id){
-  activeTab = id;
+  activeTab=id;
   renderTabs();
   renderContent();
 }
 
 function renderContent(){
-  const el = document.getElementById("content");
+  const el=document.getElementById("content");
 
   if(activeTab==="roadmap"){
-    el.innerHTML = PHASES.map(p=>`
-      <div class="phase card">
-        <div class="phase-header" onclick="togglePhase(${p.id})">
-          <strong>${p.title}</strong> (${p.weeks})
+    el.innerHTML=PHASES.map(p=>`
+      <div class="card phase">
+        <div class="phase-header" onclick="toggle(${p.id})">
+          <b>${p.title}</b> (${p.weeks})
         </div>
-        <div class="phase-body" id="phase-${p.id}">
+        <div class="phase-body" id="p${p.id}">
           ${p.tasks.map(t=>`<div class="task">• ${t}</div>`).join("")}
         </div>
       </div>
@@ -189,47 +200,44 @@ function renderContent(){
   }
 
   if(activeTab==="stack"){
-    el.innerHTML = `
-      <div class="grid grid-2">
-        ${STACK.map(s=>`
-          <div class="card">
-            <h4>${s.layer}</h4>
-            ${s.items.map(i=>`<span class="badge">${i}</span>`).join("")}
-          </div>
-        `).join("")}
-      </div>
-    `;
+    el.innerHTML=`<div class="grid grid-2">
+      ${STACK.map(s=>`
+        <div class="card">
+          <h4>${s.layer}</h4>
+          ${s.items.map(i=>`<span class="badge">${i}</span>`).join("")}
+        </div>`).join("")}
+    </div>`;
   }
 
   if(activeTab==="roles"){
-    el.innerHTML = `
-      <div class="grid grid-3">
-        ${ROLES.map(r=>`
-          <div class="card">
-            <h4>${r.role}</h4>
-            ${r.features.map(f=>`<div class="task">• ${f}</div>`).join("")}
-          </div>
-        `).join("")}
-      </div>
-    `;
+    el.innerHTML=`<div class="grid grid-3">
+      ${ROLES.map(r=>`
+        <div class="card">
+          <h4>${r.role}</h4>
+          ${r.features.map(f=>`<div class="task">• ${f}</div>`).join("")}
+        </div>`).join("")}
+    </div>`;
+  }
+
+  if(activeTab==="schema"){
+    el.innerHTML=`<div class="card">PostgreSQL + Prisma (same as your React design)</div>`;
   }
 
   if(activeTab==="costs"){
-    el.innerHTML = COSTS.map(c=>`
-      <div class="card" style="margin-bottom:10px;">
-        ${c.service} — <b>${c.cost}</b>
-      </div>
+    el.innerHTML=COSTS.map(c=>`
+      <div class="card">${c.service} — <b>${c.cost}</b></div>
     `).join("");
   }
 }
 
-function togglePhase(id){
-  const el = document.getElementById("phase-"+id);
-  el.style.display = el.style.display === "block" ? "none" : "block";
+function toggle(id){
+  const el=document.getElementById("p"+id);
+  el.style.display = el.style.display==="block"?"none":"block";
 }
 
 renderTabs();
 renderContent();
+
 </script>
 
 </body>
