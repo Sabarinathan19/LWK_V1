@@ -1,136 +1,236 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AccessCoach</title><style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LWK Platform Blueprint</title>
 
-:root {
-  --ink:#0e0e0f;
-  --paper:#faf9f6;
-  --teal:#1a6b6b;
-  --gold:#c8922a;
-  --muted:#6b6760;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0A0A0F;
+      color: #E8E8F0;
+    }
 
-body{margin:0;font-family:'DM Sans';background:var(--paper);}
-.hidden{display:none;}
+    .container {
+      max-width: 960px;
+      margin: auto;
+      padding: 28px 20px;
+    }
 
-/* Auth */
-.auth{display:flex;height:100vh;}
-.left{flex:1;background:var(--teal);color:#fff;padding:60px;}
-.right{flex:1;display:flex;align-items:center;justify-content:center;}
-.card{width:320px;}
-input{width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:6px;}
-button{padding:10px;width:100%;background:var(--teal);color:#fff;border:none;border-radius:6px;cursor:pointer;}
+    .header {
+      background: linear-gradient(135deg, #0F0F1A, #1A1030, #0F1A2A);
+      border-bottom: 1px solid #2A2A3A;
+      padding: 20px;
+    }
 
-/* Dashboard */
-.dashboard{display:flex;height:100vh;}
-.sidebar{width:220px;background:#111;color:#fff;padding:20px;}
-.sidebar h2 span{color:var(--gold);} 
-.menu div{padding:10px;cursor:pointer;}
-.menu div:hover{background:#333;}
+    .tabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      margin-top: 20px;
+    }
 
-.main{flex:1;padding:20px;overflow:auto;}
-.card-box{background:#fff;padding:20px;border-radius:10px;margin-bottom:15px;}
-.video{padding:10px;border:1px solid #ddd;margin-bottom:10px;border-radius:8px;}
-</style></head><body><!-- AUTH --><div id="auth" class="auth">
-  <div class="left">
-    <h1>Learn <em>Accessibility</em></h1>
-    <p>Modern learning platform</p>
-  </div>
-  <div class="right">
-    <div class="card">
-      <h2>Access<span style="color:var(--gold)">Coach</span></h2>
-      <input id="email" placeholder="Email">
-      <input id="password" type="password" placeholder="Password">
-      <button onclick="login()">Login</button>
-    </div>
-  </div>
-</div><!-- DASHBOARD --><div id="app" class="dashboard hidden">
-  <div class="sidebar">
-    <h2>Access<span>Coach</span></h2>
-    <div class="menu">
-      <div onclick="showPage('dashboard')">Dashboard</div>
-      <div onclick="showPage('videos')">Videos</div>
-      <div onclick="showPage('notes')">Notes</div>
-      <div onclick="logout()">Logout</div>
-    </div>
-  </div>  <div class="main"><div id="dashboardPage">
-  <div class="card-box">
-    <h3>Welcome 👋</h3>
-    <p>This is your dashboard</p>
+    .tab {
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #6B7280;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab.active {
+      color: #A78BFA;
+      border-bottom: 2px solid #A78BFA;
+    }
+
+    .card {
+      background: #12121E;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid #1E1E2E;
+    }
+
+    .phase {
+      margin-bottom: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      cursor: pointer;
+    }
+
+    .phase-body {
+      display: none;
+      padding: 10px 20px;
+    }
+
+    .task {
+      font-size: 13px;
+      margin: 6px 0;
+      color: #C4C4D4;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media(max-width: 768px) {
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin: 3px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="container">
+    <h2>🚀 Learn with Keerthi — LWK Platform</h2>
+    <p style="color:#6B7280;">Full Stack E-Learning Blueprint</p>
+
+    <div class="tabs" id="tabs"></div>
   </div>
 </div>
 
-<div id="videosPage" class="hidden">
-  <div class="card-box">
-    <h3>Videos</h3>
-    <div id="videoList"></div>
-  </div>
-</div>
+<div class="container" id="content"></div>
 
-<div id="notesPage" class="hidden">
-  <div class="card-box">
-    <h3>Notes</h3>
-    <textarea id="noteInput" placeholder="Write note..."></textarea>
-    <button onclick="addNote()">Save</button>
-    <div id="notesList"></div>
-  </div>
-</div>
-
-  </div>
-</div><script>
-
-// Sample Data
-const videos=[
- {title:"WCAG Guide"},
- {title:"Screen Reader"},
- {title:"Color Contrast"}
+<script>
+const PHASES = [
+  {
+    id:1,title:"Foundation",weeks:"Week 1–2",color:"#6C63FF",
+    tasks:["Initialize Turborepo","Setup PostgreSQL","JWT Auth","Google OAuth","Role middleware","Next.js setup","Express backend"]
+  },
+  {
+    id:2,title:"Core Platform",weeks:"Week 3–5",color:"#00C9A7",
+    tasks:["Course CRUD","Lessons management","Mux video upload","S3 docs","Video player","Enrollment","Catalog"]
+  }
 ];
 
-// Auth
-function login(){
-  document.getElementById('auth').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-  loadVideos();
+const STACK = [
+  {layer:"Frontend",items:["Next.js","Tailwind","Zustand"],color:"#6C63FF"},
+  {layer:"Backend",items:["Node.js","Express"],color:"#00C9A7"}
+];
+
+const ROLES = [
+  {role:"Student",features:["Enroll","Watch","Quiz","Track"]},
+  {role:"Mentor",features:["Create","Upload","Analytics"]},
+  {role:"Admin",features:["Manage users","Payments","Analytics"]}
+];
+
+const COSTS = [
+  {service:"Supabase",cost:"Free → $25"},
+  {service:"Vercel",cost:"Free → $20"}
+];
+
+const tabs = [
+  {id:"roadmap",label:"📍 Roadmap"},
+  {id:"stack",label:"🛠 Stack"},
+  {id:"roles",label:"👥 Roles"},
+  {id:"costs",label:"💰 Costs"}
+];
+
+let activeTab = "roadmap";
+
+function renderTabs(){
+  const el = document.getElementById("tabs");
+  el.innerHTML = tabs.map(t=>`
+    <div class="tab ${activeTab===t.id?'active':''}" onclick="switchTab('${t.id}')">
+      ${t.label}
+    </div>
+  `).join("");
 }
 
-function logout(){location.reload();}
-
-// Navigation
-function showPage(page){
-  ['dashboardPage','videosPage','notesPage'].forEach(id=>{
-    document.getElementById(id).classList.add('hidden');
-  });
-  document.getElementById(page+'Page').classList.remove('hidden');
+function switchTab(id){
+  activeTab = id;
+  renderTabs();
+  renderContent();
 }
 
-// Videos
-function loadVideos(){
-  const container=document.getElementById('videoList');
-  container.innerHTML='';
-  videos.forEach(v=>{
-    const div=document.createElement('div');
-    div.className='video';
-    div.innerText=v.title;
-    container.appendChild(div);
-  });
+function renderContent(){
+  const el = document.getElementById("content");
+
+  if(activeTab==="roadmap"){
+    el.innerHTML = PHASES.map(p=>`
+      <div class="phase card">
+        <div class="phase-header" onclick="togglePhase(${p.id})">
+          <strong>${p.title}</strong> (${p.weeks})
+        </div>
+        <div class="phase-body" id="phase-${p.id}">
+          ${p.tasks.map(t=>`<div class="task">• ${t}</div>`).join("")}
+        </div>
+      </div>
+    `).join("");
+  }
+
+  if(activeTab==="stack"){
+    el.innerHTML = `
+      <div class="grid grid-2">
+        ${STACK.map(s=>`
+          <div class="card">
+            <h4>${s.layer}</h4>
+            ${s.items.map(i=>`<span class="badge">${i}</span>`).join("")}
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  if(activeTab==="roles"){
+    el.innerHTML = `
+      <div class="grid grid-3">
+        ${ROLES.map(r=>`
+          <div class="card">
+            <h4>${r.role}</h4>
+            ${r.features.map(f=>`<div class="task">• ${f}</div>`).join("")}
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  if(activeTab==="costs"){
+    el.innerHTML = COSTS.map(c=>`
+      <div class="card" style="margin-bottom:10px;">
+        ${c.service} — <b>${c.cost}</b>
+      </div>
+    `).join("");
+  }
 }
 
-// Notes
-function addNote(){
-  const val=document.getElementById('noteInput').value;
-  if(!val) return;
-
-  const list=document.getElementById('notesList');
-  const div=document.createElement('div');
-  div.className='video';
-  div.innerText=val;
-  list.appendChild(div);
-
-  document.getElementById('noteInput').value='';
+function togglePhase(id){
+  const el = document.getElementById("phase-"+id);
+  el.style.display = el.style.display === "block" ? "none" : "block";
 }
 
-</script></body>
-      </html>
+renderTabs();
+renderContent();
+</script>
+
+</body>
+</html>
