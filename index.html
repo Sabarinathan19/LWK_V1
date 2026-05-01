@@ -1,244 +1,1352 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LWK Platform Blueprint</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LWK Platform — Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  background: #0A0A0F;
-  color: #E8E8F0;
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.container {
-  max-width: 960px;
-  margin: auto;
-  padding: 28px 20px;
-}
+  :root {
+    --bg: #0F0F0F;
+    --bg-card: #1A1A1A;
+    --bg-muted: #252525;
+    --border: #2A2A2A;
+    --text: #F9FAFB;
+    --text-muted: #9CA3AF;
+    --primary: #E84545;
+    --accent: #F5A623;
+    --gold: #FFD700;
+    --success: #22C55E;
+  }
 
-.header {
-  background: linear-gradient(135deg, #0F0F1A, #1A1030, #0F1A2A);
-  border-bottom: 1px solid #2A2A3A;
-  padding: 20px;
-}
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-.tabs {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  margin-top: 20px;
-}
+  h1,h2,h3,h4,h5 { font-family: 'Sora', sans-serif; }
 
-.tab {
-  padding: 10px 16px;
-  cursor: pointer;
-  font-weight: 600;
-  color: #6B7280;
-  border-bottom: 2px solid transparent;
-}
+  /* ── DEMO WRAPPER ── */
+  .demo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 80px;
+    gap: 0;
+  }
 
-.tab.active {
-  color: #A78BFA;
-  border-bottom: 2px solid #A78BFA;
-}
+  /* ── HEADER BADGE ── */
+  .demo-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .demo-header .badge {
+    display: inline-block;
+    background: rgba(232,69,69,.15);
+    color: var(--primary);
+    border: 1px solid rgba(232,69,69,.3);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .demo-header h1 { font-size: clamp(26px, 5vw, 44px); font-weight: 800; line-height: 1.15; }
+  .demo-header h1 span { color: var(--primary); }
+  .demo-header p { color: var(--text-muted); margin-top: 10px; font-size: 15px; }
 
-.card {
-  background: #12121E;
-  border-radius: 12px;
-  padding: 16px;
-  border: 1px solid #1E1E2E;
-}
+  /* ── NAV TABS ── */
+  .tab-bar {
+    display: flex;
+    gap: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 6px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tab-btn:hover { color: var(--text); background: var(--bg-muted); }
+  .tab-btn.active { background: var(--primary); color: #fff; }
+  .tab-btn .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .6;
+  }
 
-.phase {
-  margin-bottom: 10px;
-}
+  /* ── BROWSER CHROME ── */
+  .browser {
+    width: 100%;
+    max-width: 1100px;
+    background: #111;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 40px 120px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.04);
+    animation: slideUp .5s ease both;
+  }
+  @keyframes slideUp {
+    from { opacity:0; transform:translateY(24px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .browser-bar {
+    background: #1C1C1C;
+    border-bottom: 1px solid #2a2a2a;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .dots { display:flex; gap:6px; }
+  .dot-red { width:12px;height:12px;border-radius:50%;background:#FF5F57; }
+  .dot-amber { width:12px;height:12px;border-radius:50%;background:#FEBC2E; }
+  .dot-green { width:12px;height:12px;border-radius:50%;background:#28C840; }
+  .url-bar {
+    flex:1;
+    background: #262626;
+    border-radius: 7px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: monospace;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .url-bar span { color: var(--primary); }
 
-.phase-header {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-}
+  /* ── SCREEN ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
 
-.phase-body {
-  display: none;
-  margin-top: 10px;
-}
+  /* ── SHARED NAVBAR ── */
+  .navbar {
+    background: rgba(15,15,15,.95);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    height: 60px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Sora', sans-serif; font-weight: 800; font-size: 18px;
+  }
+  .nav-logo .icon {
+    width: 32px; height: 32px;
+    background: var(--primary);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .nav-links { display:flex; gap:24px; }
+  .nav-links a {
+    color: var(--text-muted); text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    transition: color .15s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+  .nav-actions { display:flex; gap:10px; align-items:center; }
+  .btn-primary {
+    background: var(--primary); color:#fff;
+    border:none; border-radius:9px;
+    padding: 8px 18px; font-size:13px; font-weight:600;
+    cursor:pointer; font-family:'DM Sans',sans-serif;
+    transition: opacity .15s;
+  }
+  .btn-primary:hover { opacity:.88; }
+  .btn-outline {
+    background: transparent; color: var(--primary);
+    border: 1.5px solid var(--primary);
+    border-radius: 9px; padding: 7px 16px;
+    font-size:13px; font-weight:600;
+    cursor:pointer; font-family:'DM Sans',sans-serif;
+    transition: all .15s;
+  }
+  .btn-outline:hover { background: var(--primary); color:#fff; }
+  .avatar {
+    width:32px;height:32px;border-radius:50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;color:#fff;
+    cursor:pointer;
+  }
+  .notif-btn {
+    width:32px;height:32px;border-radius:50%;
+    background: var(--bg-muted);
+    border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;position:relative;
+  }
+  .notif-dot {
+    position:absolute;top:4px;right:4px;
+    width:8px;height:8px;border-radius:50%;
+    background:var(--primary);border:2px solid var(--bg);
+  }
 
-.task {
-  font-size: 13px;
-  margin: 6px 0;
-  color: #C4C4D4;
-}
+  /* ── PAGE CONTENT ── */
+  .page { padding: 0; min-height: 500px; }
 
-.grid {
-  display: grid;
-  gap: 12px;
-}
+  /* ── HOME PAGE ── */
+  .hero {
+    text-align: center;
+    padding: 64px 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+    width:600px;height:300px;
+    background: radial-gradient(ellipse, rgba(232,69,69,.12), transparent 70%);
+    pointer-events:none;
+  }
+  .hero-badge {
+    display:inline-block;
+    background:rgba(232,69,69,.12);
+    color:var(--primary);
+    border:1px solid rgba(232,69,69,.25);
+    font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    padding:4px 14px;border-radius:20px;margin-bottom:20px;
+  }
+  .hero h1 { font-size: clamp(24px, 4vw, 48px); font-weight:800; line-height:1.15; margin-bottom:16px; }
+  .hero h1 span { color: var(--primary); }
+  .hero p { color:var(--text-muted);font-size:15px;max-width:480px;margin:0 auto 28px; }
+  .hero-btns { display:flex;gap:12px;justify-content:center; }
+  .stats-row {
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+    max-width:600px;margin:40px auto 0;
+  }
+  .stat-card {
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:14px;padding:16px 12px;text-align:center;
+    transition:border-color .2s;
+  }
+  .stat-card:hover { border-color: var(--primary); }
+  .stat-icon { font-size:22px;margin-bottom:6px; }
+  .stat-val { font-family:'Sora',sans-serif;font-weight:800;font-size:22px; }
+  .stat-lbl { font-size:11px;color:var(--text-muted);margin-top:2px; }
 
-.grid-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .cta-band {
+    background: rgba(232,69,69,.07);
+    border-top:1px solid rgba(232,69,69,.12);
+    border-bottom:1px solid rgba(232,69,69,.12);
+    padding:48px 40px;text-align:center;
+  }
+  .cta-band h2 { font-size:24px;font-weight:700;margin-bottom:8px; }
+  .cta-band p { color:var(--text-muted);margin-bottom:20px;font-size:14px; }
 
-@media(max-width:768px){
-  .grid-2,.grid-3{grid-template-columns:1fr;}
-}
+  .footer-note { text-align:center;padding:20px;font-size:12px;color:#555; }
+  .footer-note span { color:var(--primary);font-weight:600; }
 
-.badge {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  margin: 3px;
-  display: inline-block;
-}
+  /* ── COURSES ── */
+  .section-header {
+    display:flex;align-items:center;justify-content:space-between;
+    padding:28px 28px 16px;
+  }
+  .section-header h2 { font-size:20px;font-weight:700; }
+  .search-bar {
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:9px;padding:8px 14px;
+    display:flex;align-items:center;gap:8px;
+    color:var(--text-muted);font-size:13px;width:220px;
+  }
+  .courses-grid {
+    display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+    padding:0 28px 32px;
+  }
+  .course-card {
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:14px;overflow:hidden;
+    transition:transform .2s,border-color .2s,box-shadow .2s;
+    cursor:pointer;
+  }
+  .course-card:hover { transform:translateY(-4px);border-color:#333;box-shadow:0 12px 40px rgba(0,0,0,.4); }
+  .course-thumb {
+    width:100%;aspect-ratio:16/9;
+    display:flex;align-items:center;justify-content:center;
+    font-size:32px;
+    position:relative;overflow:hidden;
+  }
+  .course-thumb .level-badge {
+    position:absolute;top:8px;right:8px;
+    font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+    text-transform:uppercase;letter-spacing:.04em;
+  }
+  .level-beginner { background:rgba(34,197,94,.15);color:#22C55E;border:1px solid rgba(34,197,94,.2); }
+  .level-intermediate { background:rgba(245,166,35,.15);color:var(--accent);border:1px solid rgba(245,166,35,.2); }
+  .level-advanced { background:rgba(232,69,69,.15);color:var(--primary);border:1px solid rgba(232,69,69,.2); }
+  .course-body { padding:14px; }
+  .course-body h3 { font-size:13px;font-weight:700;line-height:1.4;margin-bottom:4px; }
+  .course-meta { font-size:11px;color:var(--text-muted);margin-bottom:10px;display:flex;gap:12px; }
+  .course-footer {
+    display:flex;align-items:center;justify-content:space-between;
+    padding-top:10px;border-top:1px solid var(--border);
+  }
+  .course-price { font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:var(--primary); }
+  .enroll-btn {
+    font-size:11px;font-weight:600;padding:5px 12px;
+    background:var(--primary);color:#fff;border:none;
+    border-radius:7px;cursor:pointer;
+    font-family:'DM Sans',sans-serif;
+  }
+
+  /* ── PRICING ── */
+  .pricing-wrap {
+    padding:48px 40px;
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .pricing-wrap h2 { font-size:28px;font-weight:800;text-align:center;margin-bottom:6px; }
+  .pricing-wrap p { color:var(--text-muted);text-align:center;margin-bottom:32px; }
+  .plans-grid { display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:640px;width:100%; }
+  .plan-card {
+    background:var(--bg-card);border:1.5px solid var(--border);
+    border-radius:18px;padding:32px 28px;position:relative;
+    transition:transform .2s;
+  }
+  .plan-card:hover { transform:translateY(-3px); }
+  .plan-card.highlight { border-color:var(--primary); }
+  .plan-save-badge {
+    position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+    background:var(--accent);color:#fff;
+    font-size:10px;font-weight:700;padding:3px 14px;border-radius:20px;
+    letter-spacing:.04em;text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .plan-name { font-size:14px;font-weight:700;margin-bottom:6px; }
+  .plan-price { font-family:'Sora',sans-serif;font-weight:800;font-size:36px;color:var(--primary); }
+  .plan-period { color:var(--text-muted);font-size:13px;margin-bottom:20px; }
+  .plan-features { list-style:none;margin-bottom:24px; }
+  .plan-features li {
+    display:flex;align-items:center;gap:8px;
+    font-size:13px;padding:5px 0;color:var(--text-muted);
+  }
+  .plan-features li::before { content:'✓';color:var(--primary);font-weight:700;flex-shrink:0; }
+  .plan-btn {
+    width:100%;padding:11px;border-radius:10px;
+    font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;
+    cursor:pointer;border:none;transition:opacity .15s;
+  }
+  .plan-btn.primary-btn { background:var(--primary);color:#fff; }
+  .plan-btn.outline-btn {
+    background:transparent;color:var(--primary);
+    border:1.5px solid var(--primary);
+  }
+  .plan-btn:hover { opacity:.88; }
+
+  /* ── LOGIN ── */
+  .auth-wrap {
+    min-height:500px;display:flex;align-items:center;justify-content:center;padding:40px 20px;
+  }
+  .auth-card {
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:20px;padding:40px 36px;width:100%;max-width:400px;
+  }
+  .auth-logo {
+    width:48px;height:48px;background:var(--primary);border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;margin:0 auto 16px;
+  }
+  .auth-card h2 { font-size:22px;font-weight:800;text-align:center;margin-bottom:4px; }
+  .auth-card .sub { color:var(--text-muted);font-size:13px;text-align:center;margin-bottom:24px; }
+  .google-btn {
+    width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+    background:none;border:1px solid var(--border);border-radius:10px;
+    padding:10px;color:var(--text);font-size:13px;font-weight:500;
+    cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;margin-bottom:20px;
+  }
+  .google-btn:hover { background:var(--bg-muted); }
+  .divider { display:flex;align-items:center;gap:10px;margin-bottom:20px; }
+  .divider hr { flex:1;border:none;border-top:1px solid var(--border); }
+  .divider span { color:var(--text-muted);font-size:12px; }
+  .form-group { margin-bottom:14px; }
+  .form-group label { display:block;font-size:12px;font-weight:600;margin-bottom:6px; }
+  .form-input {
+    width:100%;background:var(--bg);border:1px solid var(--border);
+    border-radius:9px;padding:10px 14px;color:var(--text);
+    font-size:13px;font-family:'DM Sans',sans-serif;
+    outline:none;transition:border-color .15s;
+  }
+  .form-input:focus { border-color:var(--primary); }
+  .form-footer {
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:11px;margin-bottom:6px;
+  }
+  .form-footer a { color:var(--primary);text-decoration:none; }
+  .auth-submit {
+    width:100%;padding:11px;background:var(--primary);color:#fff;
+    border:none;border-radius:10px;font-size:14px;font-weight:700;
+    cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;
+    transition:opacity .15s;
+  }
+  .auth-submit:hover { opacity:.88; }
+  .auth-link { text-align:center;font-size:12px;color:var(--text-muted);margin-top:18px; }
+  .auth-link a { color:var(--primary);font-weight:600;text-decoration:none; }
+
+  /* ── STUDENT DASHBOARD ── */
+  .dash-wrap { padding:28px; }
+  .dash-greeting h2 { font-size:22px;font-weight:800;margin-bottom:4px; }
+  .dash-greeting h2 span { color:var(--primary); }
+  .dash-greeting p { color:var(--text-muted);font-size:13px;margin-bottom:24px; }
+  .stats-4 { display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px; }
+  .stat-box {
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:14px;padding:16px;
+    display:flex;align-items:center;gap:12px;
+    transition:border-color .2s;
+  }
+  .stat-box:hover { border-color:var(--primary); }
+  .stat-box-icon {
+    width:40px;height:40px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;flex-shrink:0;
+  }
+  .stat-box-icon.p { background:rgba(232,69,69,.12); }
+  .stat-box-icon.a { background:rgba(245,166,35,.12); }
+  .stat-box-icon.g { background:rgba(255,215,0,.1); }
+  .stat-box-val { font-family:'Sora',sans-serif;font-size:22px;font-weight:800; }
+  .stat-box-lbl { font-size:11px;color:var(--text-muted); }
+  .enroll-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:12px; }
+  .enroll-card {
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:14px;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .enroll-thumb {
+    width:100%;height:90px;display:flex;align-items:center;justify-content:center;
+    font-size:30px;
+  }
+  .enroll-body { padding:12px; flex:1; }
+  .enroll-body h4 { font-size:12px;font-weight:700;line-height:1.4;margin-bottom:3px; }
+  .enroll-body .by { font-size:11px;color:var(--text-muted);margin-bottom:10px; }
+  .progress-bar-wrap { margin-bottom:4px; }
+  .progress-labels {
+    display:flex;justify-content:space-between;font-size:10px;
+    color:var(--text-muted);margin-bottom:4px;
+  }
+  .progress-pct { color:var(--primary);font-weight:600; }
+  .progress-track {
+    height:5px;background:var(--bg-muted);border-radius:99px;overflow:hidden;
+  }
+  .progress-fill { height:100%;background:var(--primary);border-radius:99px; }
+  .continue-btn {
+    margin:12px;margin-top:0;text-align:center;
+    font-size:12px;font-weight:600;
+    background:rgba(232,69,69,.1);color:var(--primary);
+    border:1px solid rgba(232,69,69,.2);border-radius:8px;
+    padding:7px;cursor:pointer;
+    font-family:'DM Sans',sans-serif;
+  }
+
+  /* ── MENTOR DASHBOARD ── */
+  .mentor-header {
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:24px;
+  }
+  .mentor-courses-list { display:flex;flex-direction:column;gap:10px;margin-top:16px; }
+  .mentor-course-row {
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:12px;padding:14px 16px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .mentor-course-icon {
+    width:44px;height:36px;border-radius:8px;
+    background:rgba(232,69,69,.1);display:flex;align-items:center;justify-content:center;
+    font-size:18px;flex-shrink:0;
+  }
+  .mentor-course-info { flex:1;min-width:0; }
+  .mentor-course-info h4 { font-size:12px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .mentor-course-info .meta { font-size:11px;color:var(--text-muted);display:flex;gap:10px; }
+  .status-pill {
+    font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+    white-space:nowrap;letter-spacing:.03em;
+  }
+  .status-published { background:rgba(34,197,94,.12);color:#22C55E;border:1px solid rgba(34,197,94,.2); }
+  .status-review { background:rgba(245,166,35,.12);color:var(--accent);border:1px solid rgba(245,166,35,.2); }
+  .status-draft { background:var(--bg-muted);color:var(--text-muted);border:1px solid var(--border); }
+
+  /* ── ADMIN DASHBOARD ── */
+  .admin-layout { display:flex;min-height:500px; }
+  .admin-sidebar {
+    width:180px;flex-shrink:0;background:#111;
+    border-right:1px solid var(--border);padding:20px 12px;
+  }
+  .admin-sidebar-logo {
+    font-family:'Sora',sans-serif;font-weight:800;font-size:14px;
+    margin-bottom:24px;padding:0 8px;color:var(--primary);
+  }
+  .admin-nav-item {
+    display:flex;align-items:center;gap:10px;
+    padding:9px 10px;border-radius:9px;font-size:12px;font-weight:600;
+    color:var(--text-muted);cursor:pointer;margin-bottom:2px;
+    transition:all .15s;
+  }
+  .admin-nav-item:hover { background:var(--bg-muted);color:var(--text); }
+  .admin-nav-item.active { background:rgba(232,69,69,.12);color:var(--primary); }
+  .admin-main { flex:1;padding:24px;overflow:hidden; }
+  .admin-main h2 { font-size:18px;font-weight:700;margin-bottom:20px; }
+  .admin-stats { display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px; }
+  .admin-stat {
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:12px;padding:16px;
+  }
+  .admin-stat-val { font-family:'Sora',sans-serif;font-size:26px;font-weight:800;margin-bottom:2px; }
+  .admin-stat-lbl { font-size:11px;color:var(--text-muted); }
+  .admin-pending-title { font-size:13px;font-weight:700;margin-bottom:10px; }
+  .pending-card {
+    background:var(--bg-card);border:1px solid var(--border);
+    border-left:3px solid var(--accent);
+    border-radius:12px;padding:12px 16px;
+    display:flex;align-items:center;gap:12px;
+    margin-bottom:8px;
+  }
+  .pending-card-icon { font-size:20px; }
+  .pending-card-text p { font-size:12px;font-weight:700;margin-bottom:2px; }
+  .pending-card-text span { font-size:11px;color:var(--text-muted); }
+  /* ── LEARN PAGE ── */
+  .learn-layout { display:flex;min-height:500px; }
+  .learn-sidebar {
+    width:260px;flex-shrink:0;border-right:1px solid var(--border);
+    background:var(--bg-card);overflow:auto;
+  }
+  .learn-sidebar-title {
+    padding:16px;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;
+    border-bottom:1px solid var(--border);
+  }
+  .lesson-section { border-bottom:1px solid var(--border); }
+  .lesson-section-header {
+    padding:10px 16px;font-size:12px;font-weight:700;color:var(--text-muted);
+    background:var(--bg-muted);display:flex;align-items:center;justify-content:space-between;
+  }
+  .lesson-item {
+    display:flex;align-items:center;gap:10px;padding:10px 16px;
+    font-size:12px;cursor:pointer;transition:background .15s;
+    border-bottom:1px solid rgba(255,255,255,.04);
+  }
+  .lesson-item:hover { background:var(--bg-muted); }
+  .lesson-item.active { background:rgba(232,69,69,.08);color:var(--primary); }
+  .lesson-item.done { color:var(--text-muted); }
+  .lesson-check { width:18px;height:18px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:10px; }
+  .lesson-check.done { background:rgba(34,197,94,.15);color:#22C55E; }
+  .lesson-check.active { background:rgba(232,69,69,.15);color:var(--primary); }
+  .lesson-check.todo { background:var(--bg-muted);color:var(--text-muted); }
+  .learn-main { flex:1;display:flex;flex-direction:column; }
+  .video-area {
+    width:100%;aspect-ratio:16/9;
+    background:#000;display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
+    background: linear-gradient(135deg,#0a0a0a,#1a0808);
+  }
+  .video-play-btn {
+    width:64px;height:64px;border-radius:50%;
+    background:var(--primary);display:flex;align-items:center;justify-content:center;
+    font-size:28px;cursor:pointer;
+    box-shadow:0 0 40px rgba(232,69,69,.5);
+    transition:transform .2s;
+  }
+  .video-play-btn:hover { transform:scale(1.1); }
+  .video-progress {
+    position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.1);
+  }
+  .video-progress-fill { height:100%;background:var(--primary);width:35%; }
+  .video-title-overlay {
+    position:absolute;top:14px;left:16px;
+    font-size:12px;font-weight:600;
+    background:rgba(0,0,0,.6);padding:4px 10px;border-radius:6px;
+  }
+  .learn-info { padding:16px 20px;border-top:1px solid var(--border); }
+  .learn-info h3 { font-size:15px;font-weight:700;margin-bottom:6px; }
+  .learn-info p { font-size:12px;color:var(--text-muted);line-height:1.6; }
+
+  /* ── QUIZ ── */
+  .quiz-wrap { padding:28px;max-width:640px;margin:0 auto; }
+  .quiz-header { margin-bottom:24px; }
+  .quiz-header h3 { font-size:18px;font-weight:800;margin-bottom:4px; }
+  .quiz-meta { font-size:12px;color:var(--text-muted);display:flex;gap:14px; }
+  .quiz-progress { height:4px;background:var(--bg-muted);border-radius:99px;margin-bottom:24px;overflow:hidden; }
+  .quiz-progress-fill { height:100%;background:var(--primary);border-radius:99px;width:40%; }
+  .quiz-question { font-size:15px;font-weight:600;margin-bottom:18px;line-height:1.5; }
+  .quiz-options { display:flex;flex-direction:column;gap:10px;margin-bottom:24px; }
+  .quiz-option {
+    background:var(--bg-card);border:1.5px solid var(--border);
+    border-radius:12px;padding:12px 16px;
+    font-size:13px;cursor:pointer;
+    display:flex;align-items:center;gap:10px;
+    transition:all .15s;
+  }
+  .quiz-option:hover { border-color:var(--primary);background:rgba(232,69,69,.05); }
+  .quiz-option.selected { border-color:var(--primary);background:rgba(232,69,69,.1);color:var(--primary); }
+  .quiz-option.correct { border-color:#22C55E;background:rgba(34,197,94,.08);color:#22C55E; }
+  .quiz-option-circle {
+    width:22px;height:22px;border-radius:50%;border:2px solid currentColor;
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;flex-shrink:0;
+  }
+  .quiz-nav { display:flex;justify-content:space-between;align-items:center; }
+  .quiz-nav span { font-size:12px;color:var(--text-muted); }
+
+  /* ── NOTIFICATIONS POPUP ── */
+  .notif-panel {
+    position:fixed;top:64px;right:20px;
+    width:300px;background:var(--bg-card);border:1px solid var(--border);
+    border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.6);
+    z-index:100;
+    display:none;
+    animation:slideDown .2s ease;
+  }
+  @keyframes slideDown {
+    from{opacity:0;transform:translateY(-8px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .notif-panel.open { display:block; }
+  .notif-panel-header {
+    padding:14px 16px;border-bottom:1px solid var(--border);
+    font-size:13px;font-weight:700;display:flex;justify-content:space-between;
+  }
+  .notif-panel-header span { color:var(--primary);font-size:11px;cursor:pointer; }
+  .notif-item {
+    padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);
+    display:flex;gap:10px;font-size:12px;
+    transition:background .15s;cursor:pointer;
+  }
+  .notif-item:hover { background:var(--bg-muted); }
+  .notif-item.unread { background:rgba(232,69,69,.04); }
+  .notif-dot2 { width:6px;height:6px;border-radius:50%;background:var(--primary);flex-shrink:0;margin-top:4px; }
+  .notif-text p { margin-bottom:2px;line-height:1.4; }
+  .notif-text time { color:var(--text-muted);font-size:10px; }
+
+  /* ANIMATED LABEL */
+  .live-pill {
+    display:inline-flex;align-items:center;gap:5px;
+    background:rgba(34,197,94,.12);color:#22C55E;
+    border:1px solid rgba(34,197,94,.2);
+    font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+    margin-left:12px;
+  }
+  .live-dot { width:6px;height:6px;border-radius:50%;background:#22C55E;animation:pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.4;transform:scale(1.4);} }
+
+  /* Screen transition */
+  .screen { animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+  /* ── Responsive ── */
+  @media (max-width:700px) {
+    .courses-grid { grid-template-columns:1fr 1fr; }
+    .stats-4,.stats-row { grid-template-columns:1fr 1fr; }
+    .plans-grid { grid-template-columns:1fr; }
+    .admin-sidebar { display:none; }
+    .learn-sidebar { width:180px; }
+    .enroll-grid { grid-template-columns:1fr; }
+  }
+  @media (max-width:480px) {
+    .courses-grid { grid-template-columns:1fr; }
+    .hero { padding:40px 20px 32px; }
+  }
 </style>
 </head>
-
 <body>
 
-<div class="header">
-  <div class="container">
-    <h2>🚀 Learn with Keerthi — LWK Platform</h2>
-    <p style="color:#6B7280;">Full Stack E-Learning Blueprint</p>
-    <div class="tabs" id="tabs"></div>
+<div class="demo-wrapper">
+
+  <div class="demo-header">
+    <div class="badge">🎓 Interactive Demo</div>
+    <h1>Learn Web <span>Keerthi</span><br/>Platform Preview</h1>
+    <p>Click the tabs below to explore each section of the live app</p>
   </div>
-</div>
 
-<div class="container" id="content"></div>
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('home', this)">🏠 Home</button>
+    <button class="tab-btn" onclick="showTab('courses', this)">📚 Courses</button>
+    <button class="tab-btn" onclick="showTab('pricing', this)">💳 Pricing</button>
+    <button class="tab-btn" onclick="showTab('login', this)">🔐 Login</button>
+    <button class="tab-btn" onclick="showTab('student', this)">🎓 Student</button>
+    <button class="tab-btn" onclick="showTab('mentor', this)">👨‍🏫 Mentor</button>
+    <button class="tab-btn" onclick="showTab('admin', this)">⚙️ Admin</button>
+    <button class="tab-btn" onclick="showTab('learn', this)">▶️ Learn</button>
+    <button class="tab-btn" onclick="showTab('quiz', this)">❓ Quiz</button>
+  </div>
 
-<script>
-/* ================= DATA ================= */
+  <!-- BROWSER CHROME -->
+  <div class="browser">
+    <div class="browser-bar">
+      <div class="dots">
+        <div class="dot-red"></div>
+        <div class="dot-amber"></div>
+        <div class="dot-green"></div>
+      </div>
+      <div class="url-bar" id="urlBar">
+        <span>lwk.eskyn.com</span><span id="urlPath">/</span>
+      </div>
+      <span class="live-pill"><span class="live-dot"></span> Live Preview</span>
+    </div>
 
-const PHASES = [
-{ id:1,title:"Foundation",weeks:"Week 1–2",color:"#6C63FF",tasks:[
-"Initialize Turborepo monorepo","Setup PostgreSQL + Prisma schema","Email/password auth with JWT","Google OAuth2 login","Role middleware (Admin/Mentor/Student)","Next.js 14 + Tailwind CSS + shadcn/ui setup","Express.js backend scaffold"]},
+    <!-- NOTIFICATION PANEL (shared overlay) -->
+    <div class="notif-panel" id="notifPanel">
+      <div class="notif-panel-header">Notifications <span onclick="toggleNotif()">Mark all read</span></div>
+      <div class="notif-item unread">
+        <div class="notif-dot2"></div>
+        <div class="notif-text"><p>New quiz added: WCAG 2.2 Deep Dive</p><time>2 min ago</time></div>
+      </div>
+      <div class="notif-item unread">
+        <div class="notif-dot2"></div>
+        <div class="notif-text"><p>Your course review was approved ✅</p><time>1 hr ago</time></div>
+      </div>
+      <div class="notif-item">
+        <div style="width:6px;flex-shrink:0;"></div>
+        <div class="notif-text"><p>Keerthi uploaded a new lesson video</p><time>Yesterday</time></div>
+      </div>
+    </div>
 
-{ id:2,title:"Core Platform",weeks:"Week 3–5",color:"#00C9A7",tasks:[
-"Course CRUD (create, edit, publish)","Sections & Lessons management","Video upload → Mux (HLS streaming)","Document upload → AWS S3","Video player with resume progress","Student enrollment system","Course catalog with pagination"]},
-
-{ id:3,title:"Learning Features",weeks:"Week 6–7",color:"#FF6B6B",tasks:[
-"Quiz builder (MCQ + explanations)","Quiz attempt & scoring system","Progress tracking per lesson","Discussion / Q&A threads","Course search + Meilisearch","Ratings & Reviews","Resource download system"]},
-
-{ id:4,title:"Monetization",weeks:"Week 8–9",color:"#FFB703",tasks:[
-"Subscription plans (Monthly/Yearly)","Razorpay integration (India)","Stripe integration (Global)","Payment webhooks + verification","Access control by subscription","Mentor earnings dashboard","Coupon/promo code system"]},
-
-{ id:5,title:"Live & Notifications",weeks:"Week 10–11",color:"#8ECAE6",tasks:[
-"Socket.io real-time setup","In-app notification system","Email notifications (Resend.com)","Live class via 100ms.live","Live class scheduler","Class recording & replay","Push notifications (mobile)"]},
-
-{ id:6,title:"Admin & Polish",weeks:"Week 12–13",color:"#FB8500",tasks:[
-"Admin panel (users, courses, payments)","Mentor approval workflow","Platform analytics dashboard","React Native mobile app (Expo)","WCAG 2.1 AA accessibility audit","Comprehensive UI polish","Load testing"]},
-
-{ id:7,title:"Production Launch",weeks:"Week 14",color:"#52B788",tasks:[
-"Deploy frontend → Vercel","Deploy backend → Railway","Cloudflare CDN configuration","Sentry error monitoring","Posthog product analytics","Security audit checklist","🚀 Go Live!"]}
-];
-
-const STACK = [
-{layer:"Frontend",items:["Next.js 14","Tailwind CSS","shadcn/ui","Zustand","React Query"]},
-{layer:"Mobile",items:["React Native","Expo Router","Expo AV (video)"]},
-{layer:"Backend",items:["Node.js","Express.js","TypeScript","Socket.io","Passport.js"]},
-{layer:"Database",items:["PostgreSQL (Supabase)","Prisma ORM","Redis (Upstash)","Meilisearch"]},
-{layer:"Media",items:["Mux","AWS S3","FFmpeg","Cloudinary"]},
-{layer:"Payments",items:["Razorpay","Stripe"]},
-{layer:"Services",items:["100ms.live","Resend","Cloudflare","Sentry"]}
-];
-
-const ROLES = [
-{role:"Student",features:["Browse courses","Watch videos","Attempt quizzes","Track progress","Ask questions","Download resources","Subscribe","Join live classes"]},
-{role:"Mentor",features:["Create courses","Upload content","Build quizzes","Analytics","Earnings","Live classes","Q&A","Manage curriculum"]},
-{role:"Admin",features:["Approve mentors","Manage users","Moderate courses","Payments","Analytics","Subscriptions","Announcements"]}
-];
-
-const COSTS = [
-{service:"Supabase",cost:"Free → $25/mo"},
-{service:"Vercel",cost:"Free → $20/mo"},
-{service:"Railway",cost:"~$10/mo"},
-{service:"Mux",cost:"$0.0036/min"},
-{service:"100ms.live",cost:"$0.003/min/user"},
-{service:"Razorpay",cost:"2%"},
-{service:"Resend",cost:"Free 3k/mo"},
-{service:"Cloudflare",cost:"Free"}
-];
-
-const tabs = [
-{id:"roadmap",label:"📍 Roadmap"},
-{id:"stack",label:"🛠 Stack"},
-{id:"roles",label:"👥 Roles"},
-{id:"schema",label:"🗄 Schema"},
-{id:"costs",label:"💰 Costs"}
-];
-
-let activeTab="roadmap";
-
-/* ================= UI ================= */
-
-function renderTabs(){
-  document.getElementById("tabs").innerHTML =
-  tabs.map(t=>`<div class="tab ${activeTab===t.id?'active':''}" onclick="switchTab('${t.id}')">${t.label}</div>`).join("");
-}
-
-function switchTab(id){
-  activeTab=id;
-  renderTabs();
-  renderContent();
-}
-
-function renderContent(){
-  const el=document.getElementById("content");
-
-  if(activeTab==="roadmap"){
-    el.innerHTML=PHASES.map(p=>`
-      <div class="card phase">
-        <div class="phase-header" onclick="toggle(${p.id})">
-          <b>${p.title}</b> (${p.weeks})
+    <!-- ══ HOME ══ -->
+    <div class="screen active" id="screen-home">
+      <nav class="navbar">
+        <div class="nav-logo"><div class="icon">🎓</div> LWK</div>
+        <div class="nav-links">
+          <a href="#" class="active">Home</a>
+          <a href="#" onclick="showTab('courses',null)">Courses</a>
+          <a href="#" onclick="showTab('pricing',null)">Pricing</a>
         </div>
-        <div class="phase-body" id="p${p.id}">
-          ${p.tasks.map(t=>`<div class="task">• ${t}</div>`).join("")}
+        <div class="nav-actions">
+          <button class="btn-outline" onclick="showTab('login',null)">Login</button>
+          <button class="btn-primary" onclick="showTab('login',null)">Get Started</button>
+        </div>
+      </nav>
+      <div class="page">
+        <div class="hero">
+          <div class="hero-badge">Web Accessibility Training</div>
+          <h1>Learn <span>Web Accessibility</span><br/>the Right Way</h1>
+          <p>Affordable, hands-on courses by Keerthi. Build inclusive digital experiences — WCAG certified.</p>
+          <div class="hero-btns">
+            <button class="btn-primary" style="padding:10px 28px;font-size:14px;" onclick="showTab('courses',null)">Browse Courses</button>
+            <button class="btn-outline" style="padding:10px 24px;font-size:14px;" onclick="showTab('pricing',null)">View Pricing</button>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-icon">📖</div><div class="stat-val">20+</div><div class="stat-lbl">Courses</div></div>
+            <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-val">500+</div><div class="stat-lbl">Students</div></div>
+            <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val">200+</div><div class="stat-lbl">Certified</div></div>
+            <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-val">4.9★</div><div class="stat-lbl">Rating</div></div>
+          </div>
+        </div>
+        <div class="cta-band">
+          <h2>Ready to get inclusive?</h2>
+          <p>Start at ₹299/month — cancel anytime.</p>
+          <button class="btn-primary" style="padding:12px 36px;font-size:14px;" onclick="showTab('login',null)">Start Learning Free</button>
+        </div>
+        <div class="footer-note">Developed by <span>Eskyn Technologies</span></div>
+      </div>
+    </div>
+
+    <!-- ══ COURSES ══ -->
+    <div class="screen" id="screen-courses">
+      <nav class="navbar">
+        <div class="nav-logo"><div class="icon">🎓</div> LWK</div>
+        <div class="nav-links">
+          <a href="#">Home</a>
+          <a href="#" class="active">Courses</a>
+          <a href="#">Pricing</a>
+        </div>
+        <div class="nav-actions">
+          <button class="btn-primary" onclick="showTab('login',null)">Login</button>
+        </div>
+      </nav>
+      <div class="page">
+        <div class="section-header">
+          <h2>All Courses</h2>
+          <div class="search-bar">🔍 Search courses…</div>
+        </div>
+        <div class="courses-grid">
+          <div class="course-card" onclick="showTab('learn',null)">
+            <div class="course-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2d1010);">
+              ♿<span class="level-badge level-beginner">Beginner</span>
+            </div>
+            <div class="course-body">
+              <h3>WCAG 2.2 Fundamentals</h3>
+              <div class="course-meta"><span>👨‍🏫 Keerthi</span><span>⏱ 4h 30m</span><span>⭐ 4.9</span></div>
+              <div class="course-footer">
+                <div class="course-price">₹299/mo</div>
+                <button class="enroll-btn" onclick="event.stopPropagation();showTab('student',null)">Enroll</button>
+              </div>
+            </div>
+          </div>
+          <div class="course-card" onclick="showTab('learn',null)">
+            <div class="course-thumb" style="background:linear-gradient(135deg,#0a0f1a,#101a2d);">
+              🎨<span class="level-badge level-intermediate">Intermediate</span>
+            </div>
+            <div class="course-body">
+              <h3>Accessible Design Systems</h3>
+              <div class="course-meta"><span>👨‍🏫 Keerthi</span><span>⏱ 6h 15m</span><span>⭐ 4.8</span></div>
+              <div class="course-footer">
+                <div class="course-price">₹299/mo</div>
+                <button class="enroll-btn" onclick="event.stopPropagation();showTab('student',null)">Enroll</button>
+              </div>
+            </div>
+          </div>
+          <div class="course-card" onclick="showTab('learn',null)">
+            <div class="course-thumb" style="background:linear-gradient(135deg,#0a1a0a,#102d10);">
+              🔧<span class="level-badge level-advanced">Advanced</span>
+            </div>
+            <div class="course-body">
+              <h3>ARIA Patterns in Depth</h3>
+              <div class="course-meta"><span>👨‍🏫 Keerthi</span><span>⏱ 8h 00m</span><span>⭐ 5.0</span></div>
+              <div class="course-footer">
+                <div class="course-price">₹299/mo</div>
+                <button class="enroll-btn" onclick="event.stopPropagation();showTab('student',null)">Enroll</button>
+              </div>
+            </div>
+          </div>
+          <div class="course-card" onclick="showTab('learn',null)">
+            <div class="course-thumb" style="background:linear-gradient(135deg,#1a150a,#2d230f);">
+              📱<span class="level-badge level-beginner">Beginner</span>
+            </div>
+            <div class="course-body">
+              <h3>Mobile Accessibility Essentials</h3>
+              <div class="course-meta"><span>👨‍🏫 Keerthi</span><span>⏱ 3h 45m</span><span>⭐ 4.7</span></div>
+              <div class="course-footer">
+                <div class="course-price">₹299/mo</div>
+                <button class="enroll-btn" onclick="event.stopPropagation();showTab('student',null)">Enroll</button>
+              </div>
+            </div>
+          </div>
+          <div class="course-card" onclick="showTab('learn',null)">
+            <div class="course-thumb" style="background:linear-gradient(135deg,#0f0a1a,#1c1030);">
+              🧪<span class="level-badge level-intermediate">Intermediate</span>
+            </div>
+            <div class="course-body">
+              <h3>Automated Accessibility Testing</h3>
+              <div class="course-meta"><span>👨‍🏫 Keerthi</span><span>⏱ 5h 30m</span><span>⭐ 4.9</span></div>
+              <div class="course-footer">
+                <div class="course-price">₹299/mo</div>
+                <button class="enroll-btn" onclick="event.stopPropagation();showTab('student',null)">Enroll</button>
+              </div>
+            </div>
+          </div>
+          <div class="course-card" onclick="showTab('learn',null)">
+            <div class="course-thumb" style="background:linear-gradient(135deg,#1a0a14,#2d1020);">
+              📋<span class="level-badge level-advanced">Advanced</span>
+            </div>
+            <div class="course-body">
+              <h3>Screen Reader Mastery</h3>
+              <div class="course-meta"><span>👨‍🏫 Keerthi</span><span>⏱ 7h 20m</span><span>⭐ 4.9</span></div>
+              <div class="course-footer">
+                <div class="course-price">₹299/mo</div>
+                <button class="enroll-btn" onclick="event.stopPropagation();showTab('student',null)">Enroll</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    `).join("");
+    </div>
+
+    <!-- ══ PRICING ══ -->
+    <div class="screen" id="screen-pricing">
+      <nav class="navbar">
+        <div class="nav-logo"><div class="icon">🎓</div> LWK</div>
+        <div class="nav-links"><a href="#">Home</a><a href="#">Courses</a><a href="#" class="active">Pricing</a></div>
+        <div class="nav-actions"><button class="btn-primary" onclick="showTab('login',null)">Login</button></div>
+      </nav>
+      <div class="page">
+        <div class="pricing-wrap">
+          <h2>Simple, Affordable Pricing</h2>
+          <p>Full platform access — no hidden fees. Cancel anytime.</p>
+          <div class="plans-grid">
+            <div class="plan-card">
+              <div class="plan-name">Monthly</div>
+              <div class="plan-price">₹299</div>
+              <div class="plan-period">/month</div>
+              <ul class="plan-features">
+                <li>All courses access</li>
+                <li>Download resources</li>
+                <li>Quizzes & certificates</li>
+                <li>Q&A access</li>
+                <li>Email support</li>
+              </ul>
+              <button class="plan-btn outline-btn" onclick="showTab('login',null)">Get Started</button>
+            </div>
+            <div class="plan-card highlight">
+              <div class="plan-save-badge">Save 44%</div>
+              <div class="plan-name">Yearly</div>
+              <div class="plan-price">₹1,999</div>
+              <div class="plan-period">/year</div>
+              <ul class="plan-features">
+                <li>Everything in Monthly</li>
+                <li>Live class access</li>
+                <li>Priority support</li>
+                <li>Early access to new courses</li>
+                <li>Downloadable certificates</li>
+              </ul>
+              <button class="plan-btn primary-btn" onclick="showTab('login',null)">Get Started</button>
+            </div>
+          </div>
+          <p style="margin-top:20px;font-size:12px;color:var(--text-muted);">Payments powered by Stripe &amp; Razorpay. Secure &amp; encrypted.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ LOGIN ══ -->
+    <div class="screen" id="screen-login">
+      <nav class="navbar">
+        <div class="nav-logo"><div class="icon">🎓</div> LWK</div>
+        <div class="nav-links"><a href="#">Home</a><a href="#">Courses</a><a href="#">Pricing</a></div>
+        <div class="nav-actions"></div>
+      </nav>
+      <div class="page">
+        <div class="auth-wrap">
+          <div class="auth-card">
+            <div class="auth-logo">🎓</div>
+            <h2>Welcome back</h2>
+            <div class="sub">Sign in to continue learning</div>
+            <button class="google-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              Continue with Google
+            </button>
+            <div class="divider"><hr/><span>or</span><hr/></div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-input" placeholder="you@example.com" />
+            </div>
+            <div class="form-group">
+              <div class="form-footer">
+                <label>Password</label>
+                <a href="#">Forgot password?</a>
+              </div>
+              <input type="password" class="form-input" placeholder="••••••••" />
+              </div>
+            <button class="auth-submit" onclick="showTab('student',null)">Sign in</button>
+            <div class="auth-link">Don't have an account? <a href="#" onclick="showTab('student',null)">Sign up free</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STUDENT DASHBOARD ══ -->
+    <div class="screen" id="screen-student">
+      <nav class="navbar">
+        <div class="nav-logo"><div class="icon">🎓</div> LWK</div>
+        <div class="nav-links">
+          <a href="#" class="active">Dashboard</a>
+          <a href="#" onclick="showTab('courses',null)">Courses</a>
+        </div>
+        <div class="nav-actions">
+          <button class="notif-btn" onclick="toggleNotif()">🔔<div class="notif-dot"></div></button>
+          <div class="avatar">AR</div>
+        </div>
+      </nav>
+      <div class="page">
+        <div class="dash-wrap">
+          <div class="dash-greeting">
+            <h2>Welcome back, <span>Arjun</span> 👋</h2>
+            <p>Keep up the great work on your accessibility journey!</p>
+          </div>
+          <div class="stats-4">
+            <div class="stat-box">
+              <div class="stat-box-icon p">📖</div>
+              <div><div class="stat-box-val">4</div><div class="stat-box-lbl">Enrolled</div></div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-icon a">📈</div>
+              <div><div class="stat-box-val">2</div><div class="stat-box-lbl">In Progress</div></div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-icon g">🏆</div>
+              <div><div class="stat-box-val">1</div><div class="stat-box-lbl">Completed</div></div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-icon p">⏱</div>
+              <div><div class="stat-box-val">6h 20m</div><div class="stat-box-lbl">Watch Time</div></div>
+            </div>
+          </div>
+          <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;">My Courses</h3>
+          <div class="enroll-grid">
+            <div class="enroll-card">
+              <div class="enroll-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2d1010);">♿</div>
+              <div class="enroll-body">
+                <h4>WCAG 2.2 Fundamentals</h4>
+                <div class="by">By Keerthi</div>
+                <div class="progress-bar-wrap">
+                  <div class="progress-labels"><span>7/12 lessons</span><span class="progress-pct">58%</span></div>
+                  <div class="progress-track"><div class="progress-fill" style="width:58%"></div></div>
+                </div>
+              </div>
+              <button class="continue-btn" onclick="showTab('learn',null)">Continue Learning →</button>
+            </div>
+            <div class="enroll-card">
+              <div class="enroll-thumb" style="background:linear-gradient(135deg,#0a0f1a,#101a2d);">🎨</div>
+              <div class="enroll-body">
+                <h4>Accessible Design Systems</h4>
+                <div class="by">By Keerthi</div>
+                <div class="progress-bar-wrap">
+                  <div class="progress-labels"><span>3/18 lessons</span><span class="progress-pct">17%</span></div>
+                  <div class="progress-track"><div class="progress-fill" style="width:17%"></div></div>
+                </div>
+              </div>
+              <button class="continue-btn" onclick="showTab('learn',null)">Continue Learning →</button>
+            </div>
+            <div class="enroll-card">
+              <div class="enroll-thumb" style="background:linear-gradient(135deg,#0a1a0a,#102d10);">🔧</div>
+              <div class="enroll-body">
+                <h4>ARIA Patterns in Depth</h4>
+                <div class="by">By Keerthi</div>
+                <div class="progress-bar-wrap">
+                  <div class="progress-labels"><span>0/22 lessons</span><span class="progress-pct">0%</span></div>
+                  <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+              </div>
+              <button class="continue-btn" onclick="showTab('learn',null)">Start Course →</button>
+            </div>
+            <div class="enroll-card">
+              <div class="enroll-thumb" style="background:linear-gradient(135deg,#1a150a,#2d230f);">📱</div>
+              <div class="enroll-body">
+                <h4>Mobile Accessibility Essentials</h4>
+                <div class="by">By Keerthi</div>
+                <div class="progress-bar-wrap">
+                  <div class="progress-labels"><span>10/10 lessons</span><span class="progress-pct">100%</span></div>
+                  <div class="progress-track"><div class="progress-fill" style="width:100%;background:#22C55E"></div></div>
+                </div>
+              </div>
+              <button class="continue-btn" style="background:rgba(34,197,94,.08);color:#22C55E;border-color:rgba(34,197,94,.2);">✅ Completed</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MENTOR DASHBOARD ══ -->
+    <div class="screen" id="screen-mentor">
+      <nav class="navbar">
+        <div class="nav-logo"><div class="icon">🎓</div> LWK</div>
+        <div class="nav-links"><a href="#" class="active">Dashboard</a><a href="#">My Courses</a></div>
+        <div class="nav-actions">
+          <button class="notif-btn" onclick="toggleNotif()">🔔<div class="notif-dot"></div></button>
+          <div class="avatar" style="background:linear-gradient(135deg,#0066ff,#0033aa)">KR</div>
+        </div>
+      </nav>
+      <div class="page">
+        <div class="dash-wrap">
+          <div class="mentor-header">
+            <div>
+              <h2 style="font-size:20px;font-weight:800;">Mentor Dashboard</h2>
+              <p style="color:var(--text-muted);font-size:13px;margin-top:2px;">Welcome back, <span style="color:var(--primary);font-weight:600;">Keerthi</span></p>
+            </div>
+            <button class="btn-primary">+ New Course</button>
+          </div>
+          <div class="stats-4" style="margin-bottom:24px;">
+            <div class="stat-box">
+              <div class="stat-box-icon p">📚</div>
+              <div><div class="stat-box-val">6</div><div class="stat-box-lbl">Total Courses</div></div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-icon a">✅</div>
+              <div><div class="stat-box-val">4</div><div class="stat-box-lbl">Published</div></div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-icon g">👥</div>
+              <div><div class="stat-box-val">312</div><div class="stat-box-lbl">Students</div></div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-icon p">💰</div>
+              <div><div class="stat-box-val">₹93,088</div><div class="stat-box-lbl">Revenue</div></div>
+            </div>
+          </div>
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:10px;">My Courses</h3>
+          <div class="mentor-courses-list">
+            <div class="mentor-course-row">
+              <div class="mentor-course-icon">♿</div>
+              <div class="mentor-course-info">
+                <h4>WCAG 2.2 Fundamentals</h4>
+                <div class="meta"><span>147 students</span><span>12 lessons</span></div>
+              </div>
+              <span class="status-pill status-published">Published</span>
+            </div>
+            <div class="mentor-course-row">
+              <div class="mentor-course-icon">🎨</div>
+              <div class="mentor-course-info">
+                <h4>Accessible Design Systems</h4>
+                <div class="meta"><span>89 students</span><span>18 lessons</span></div>
+              </div>
+              <span class="status-pill status-published">Published</span>
+            </div>
+            <div class="mentor-course-row">
+              <div class="mentor-course-icon">🔧</div>
+              <div class="mentor-course-info">
+                <h4>ARIA Patterns in Depth</h4>
+                <div class="meta"><span>76 students</span><span>22 lessons</span></div>
+              </div>
+              <span class="status-pill status-published">Published</span>
+            </div>
+            <div class="mentor-course-row">
+              <div class="mentor-course-icon">🧪</div>
+              <div class="mentor-course-info">
+                <h4>Automated Accessibility Testing</h4>
+                <div class="meta"><span>0 students</span><span>15 lessons</span></div>
+              </div>
+              <span class="status-pill status-review">Under Review</span>
+            </div>
+            <div class="mentor-course-row">
+              <div class="mentor-course-icon">📋</div>
+              <div class="mentor-course-info">
+                <h4>Screen Reader Mastery</h4>
+                <div class="meta"><span>0 students</span><span>0 lessons</span></div>
+              </div>
+              <span class="status-pill status-draft">Draft</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ADMIN DASHBOARD ══ -->
+    <div class="screen" id="screen-admin">
+      <nav class="navbar">
+        <div class="nav-logo"><div class="icon">🎓</div> LWK Admin</div>
+        <div class="nav-links"></div>
+        <div class="nav-actions">
+          <div class="avatar" style="background:linear-gradient(135deg,#6b21a8,#3b0764)">AD</div>
+        </div>
+      </nav>
+      <div class="page">
+        <div class="admin-layout">
+          <div class="admin-sidebar">
+            <div class="admin-sidebar-logo">⚙️ Admin</div>
+            <div class="admin-nav-item active">📊 Overview</div>
+            <div class="admin-nav-item">👥 Users</div>
+            <div class="admin-nav-item">👨‍🏫 Mentors</div>
+            <div class="admin-nav-item">📚 Courses</div>
+            <div class="admin-nav-item">💳 Payments</div>
+          </div>
+          <div class="admin-main">
+            <h2>Platform Overview</h2>
+            <div class="admin-stats">
+              <div class="admin-stat">
+                <div class="admin-stat-val">2,847</div>
+                <div class="admin-stat-lbl">👥 Total Users</div>
+              </div>
+              <div class="admin-stat">
+                <div class="admin-stat-val">20</div>
+                <div class="admin-stat-lbl">📚 Total Courses</div>
+              </div>
+              <div class="admin-stat">
+                <div class="admin-stat-val">1,204</div>
+                <div class="admin-stat-lbl">✅ Active Subscriptions</div>
+              </div>
+              <div class="admin-stat">
+                <div class="admin-stat-val" style="color:var(--primary);">₹3,59,996</div>
+                <div class="admin-stat-lbl">💰 Total Revenue</div>
+              </div>
+            </div>
+            <div class="admin-pending-title">Pending Actions</div>
+            <div class="pending-card">
+              <div class="pending-card-icon">👨‍🏫</div>
+              <div class="pending-card-text">
+                <p>3 Mentors Pending</p>
+                <span>Awaiting approval</span>
+              </div>
+            </div>
+            <div class="pending-card" style="border-left-color:var(--primary);">
+              <div class="pending-card-icon">📋</div>
+              <div class="pending-card-text">
+                <p>2 Courses Under Review</p>
+                <span>Awaiting publish</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ LEARN PAGE ══ -->
+    <div class="screen" id="screen-learn">
+      <nav class="navbar">
+        <div class="nav-logo"><div class="icon">🎓</div> LWK</div>
+        <div class="nav-links"><a href="#" onclick="showTab('student',null)">← Dashboard</a></div>
+        <div class="nav-actions">
+          <button class="notif-btn" onclick="toggleNotif()">🔔<div class="notif-dot"></div></button>
+          <div class="avatar">AR</div>
+        </div>
+      </nav>
+      <div class="page">
+        <div class="learn-layout">
+          <div class="learn-sidebar">
+            <div class="learn-sidebar-title">WCAG 2.2 Fundamentals</div>
+            <div class="lesson-section">
+              <div class="lesson-section-header">Section 1 · Introduction <span>3/3</span></div>
+              <div class="lesson-item done"><div class="lesson-check done">✓</div> What is Accessibility?</div>
+              <div class="lesson-item done"><div class="lesson-check done">✓</div> WCAG Overview</div>
+              <div class="lesson-item done"><div class="lesson-check done">✓</div> Setting Up Tools</div>
+            </div>
+            <div class="lesson-section">
+              <div class="lesson-section-header">Section 2 · Core Principles <span>2/4</span></div>
+              <div class="lesson-item done"><div class="lesson-check done">✓</div> Perceivable</div>
+              <div class="lesson-item active"><div class="lesson-check active">▶</div> Operable</div>
+              <div class="lesson-item"><div class="lesson-check todo">○</div> Understandable</div>
+              <div class="lesson-item"><div class="lesson-check todo">○</div> Robust</div>
+            </div>
+            <div class="lesson-section">
+              <div class="lesson-section-header">Section 3 · Testing <span>0/3</span></div>
+              <div class="lesson-item"><div class="lesson-check todo">○</div> axe DevTools</div>
+              <div class="lesson-item"><div class="lesson-check todo">○</div> Manual Testing</div>
+              <div class="lesson-item"><div class="lesson-check todo">○</div> Screen Readers</div>
+            </div>
+          </div>
+          <div class="learn-main">
+            <div class="video-area">
+              <div class="video-title-overlay">Lesson 5: Operable — Keyboard Navigation</div>
+              <div class="video-play-btn" onclick="this.innerHTML='⏸'">▶</div>
+              <div class="video-progress"><div class="video-progress-fill"></div></div>
+            </div>
+            <div class="learn-info">
+              <h3>Operable — Keyboard Navigation</h3>
+              <p>In this lesson, you'll learn how to ensure all interactive elements are reachable and usable via keyboard alone. This is critical for users who cannot use a mouse, including those with motor disabilities using switch access devices or keyboard-only navigation.</p>
+              <div style="display:flex;gap:10px;margin-top:14px;">
+                <button class="btn-outline" style="font-size:12px;padding:6px 14px;">← Previous</button>
+                <button class="btn-primary" style="font-size:12px;padding:6px 14px;" onclick="showTab('quiz',null)">Next Lesson →</button>
+                <button class="btn-outline" style="font-size:12px;padding:6px 14px;margin-left:auto;" onclick="showTab('quiz',null)">Take Quiz ❓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ QUIZ ══ -->
+    <div class="screen" id="screen-quiz">
+      <nav class="navbar">
+        <div class="nav-logo"><div class="icon">🎓</div> LWK</div>
+        <div class="nav-links"><a href="#" onclick="showTab('learn',null)">← Back to Lesson</a></div>
+        <div class="nav-actions"><div class="avatar">AR</div></div>
+      </nav>
+      <div class="page">
+        <div class="quiz-wrap">
+          <div class="quiz-header">
+            <h3>❓ Section Quiz</h3>
+            <div class="quiz-meta"><span>📚 WCAG 2.2 Fundamentals</span><span>Question 2 of 5</span></div>
+          </div>
+          <div class="quiz-progress"><div class="quiz-progress-fill"></div></div>
+          <div class="quiz-question">Which WCAG success criterion requires that all functionality is available from a keyboard interface without requiring specific timings for individual keystrokes?</div>
+          <div class="quiz-options" id="quizOptions">
+            <div class="quiz-option" onclick="selectOption(this, false)">
+              <div class="quiz-option-circle">A</div>
+              1.4.1 Use of Color
+            </div>
+            <div class="quiz-option" onclick="selectOption(this, false)">
+              <div class="quiz-option-circle">B</div>
+              1.3.1 Info and Relationships
+            </div>
+            <div class="quiz-option" onclick="selectOption(this, true)">
+              <div class="quiz-option-circle">C</div>
+              2.1.1 Keyboard
+            </div>
+            <div class="quiz-option" onclick="selectOption(this, false)">
+              <div class="quiz-option-circle">D</div>
+              4.1.2 Name, Role, Value
+            </div>
+          </div>
+          <div class="quiz-nav">
+            <span>Score: 1/1 correct so far</span>
+            <button class="btn-primary" style="font-size:13px;">Next Question →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /browser -->
+</div><!-- /demo-wrapper -->
+
+<script>
+const urls = {
+  home: '/',
+  courses: '/courses',
+  pricing: '/pricing',
+  login: '/login',
+  student: '/student/dashboard',
+  mentor: '/mentor/dashboard',
+  admin: '/admin/dashboard',
+  learn: '/learn/wcag-22-fundamentals',
+  quiz: '/learn/wcag-22-fundamentals?quiz=1',
+};
+
+function showTab(name, btn) {
+  // hide all screens
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+
+  // update tab buttons
+  if (btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  } else {
+    // find matching tab
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.textContent.toLowerCase().includes(name)) {
+        document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+      }
+    });
   }
 
-  if(activeTab==="stack"){
-    el.innerHTML=`<div class="grid grid-2">
-      ${STACK.map(s=>`
-        <div class="card">
-          <h4>${s.layer}</h4>
-          ${s.items.map(i=>`<span class="badge">${i}</span>`).join("")}
-        </div>`).join("")}
-    </div>`;
-  }
+  // update url bar
+  document.getElementById('urlPath').textContent = urls[name] || '/';
+  // close notif
+  document.getElementById('notifPanel').classList.remove('open');
+}
 
-  if(activeTab==="roles"){
-    el.innerHTML=`<div class="grid grid-3">
-      ${ROLES.map(r=>`
-        <div class="card">
-          <h4>${r.role}</h4>
-          ${r.features.map(f=>`<div class="task">• ${f}</div>`).join("")}
-        </div>`).join("")}
-    </div>`;
-  }
+function toggleNotif() {
+  document.getElementById('notifPanel').classList.toggle('open');
+}
 
-  if(activeTab==="schema"){
-    el.innerHTML=`<div class="card">PostgreSQL + Prisma (same as your React design)</div>`;
-  }
-
-  if(activeTab==="costs"){
-    el.innerHTML=COSTS.map(c=>`
-      <div class="card">${c.service} — <b>${c.cost}</b></div>
-    `).join("");
+let answered = false;
+function selectOption(el, correct) {
+  if (answered) return;
+  answered = true;
+  el.classList.add(correct ? 'correct' : 'selected');
+  if (correct) {
+    el.querySelector('.quiz-option-circle').textContent = '✓';
+    setTimeout(() => {
+      document.querySelector('.quiz-nav span').textContent = '✅ Correct! Score: 2/2';
+    }, 400);
+  } else {
+    // highlight correct
+    document.querySelectorAll('.quiz-option')[2].classList.add('correct');
+    document.querySelectorAll('.quiz-option')[2].querySelector('.quiz-option-circle').textContent = '✓';
+    setTimeout(() => {
+      document.querySelector('.quiz-nav span').textContent = '❌ Score: 1/2';
+    }, 400);
   }
 }
 
-function toggle(id){
-  const el=document.getElementById("p"+id);
-  el.style.display = el.style.display==="block"?"none":"block";
-}
-
-renderTabs();
-renderContent();
-
+// close notif when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.notif-panel') && !e.target.closest('.notif-btn')) {
+    document.getElementById('notifPanel').classList.remove('open');
+  }
+});
 </script>
-
 </body>
 </html>
